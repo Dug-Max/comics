@@ -5,8 +5,18 @@
     "descripcion": "The Flash Terror"
   },
   {
-    "titulo": "Libro 2",
-    "archivo": "libros/libro2.pdf",
-    "descripcion": "Descripción breve del libro 2."
-  }
+    "titulo": "The Flash Año 1",
+    "archivo": "comics/Flash_año1.1.pdf",
+    "descripcion": "The Flash Año 1"
+  },
+  {
+    "titulo": "The Flash Año 2",
+    "archivo": "comics/Flash_año1.2.pdf",
+    "descripcion": "The Flash Año 2"
+  },
+  {
+    "titulo": "The Flash Año 3",
+    "archivo": "comics/Flash_año1.3.pdf",
+    "descripcion": "The Flash Año 3"
+  },
 ]
