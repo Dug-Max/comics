@@ -1,0 +1,12 @@
+[
+  {
+    "titulo": "The Flash Terror",
+    "archivo": "libros/libro1.pdf",
+    "descripcion": "The Flash Terror"
+  },
+  {
+    "titulo": "Libro 2",
+    "archivo": "libros/libro2.pdf",
+    "descripcion": "Descripción breve del libro 2."
+  }
+]
