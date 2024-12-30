@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca de Comics PDF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .book-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .book-item {
+            background-color: #fff;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .book-item a {
+            text-decoration: none;
+            color: #007BFF;
+            font-size: 18px;
+        }
+        .book-item a:hover {
+            text-decoration: underline;
+        }
+        .book-item p {
+            margin: 5px 0 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Biblioteca de Comics PDF</h1>
+    
+    <ul id="bookList" class="book-list">
+        <!-- Los libros se cargarán aquí automáticamente -->
+    </ul>
+
+    <script>
+        // URL del archivo JSON en tu repositorio de GitHub
+        const librosUrl = "https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/libros.json";
+
+        // Función para cargar los libros desde el archivo JSON
+        function cargarLibros() {
+            fetch(librosUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const listaLibros = document.getElementById('bookList');
+                    data.forEach(libro => {
+                        const item = document.createElement('li');
+                        item.classList.add('book-item');
+                        
+                        item.innerHTML = `
+                            <a href="https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/${libro.archivo}" target="_blank">
+                                ${libro.titulo}
+                            </a>
+                            <p>${libro.descripcion}</p>
+                        `;
+                        
+                        listaLibros.appendChild(item);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error al cargar los libros:", error);
+                });
+        }
+
+        // Llamar la función para cargar los libros cuando la página se haya cargado
+        window.onload = cargarLibros;
+    </script>
+</body>
+</html>
