@@ -4,9 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver Libro en PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
     <h1>Ver el Libro en PDF</h1>
-    <iframe src="https://docs.google.com/viewer?url=https://github.com/Dug-Max/comics/main/Comic_Fla.pdf&embedded=true" width="100%" height="800px"></iframe>
+    <canvas id="pdf-render"></canvas>
+    <script>
+        const url = 'https://github.com/Dug-Max/comics/main/Comic_Fla.pdf';
+
+        const pdfjsLib = window['pdfjs-dist/build/pdf'];
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc = '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+
+        pdfjsLib.getDocument(url).promise.then(function (pdfDoc_) {
+            pdfDoc = pdfDoc_;
+            renderPage(1);
+        });
+
+        function renderPage(num) {
+            pdfDoc.getPage(num).then(function (page) {
+                const scale = 1.5;
+                const viewport = page.getViewport({ scale: scale });
+                const canvas = document.getElementById('pdf-render');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                page.render({
+                    canvasContext: context,
+                    viewport: viewport
+                });
+            });
+        }
+    </script>
 </body>
 </html>
