@@ -51,7 +51,7 @@
 
         // Función para obtener las imágenes del repositorio de GitHub
         async function fetchImages() {
-            const apiUrl = `https://github.com/${repoOwner}/${repoName}/contents/${folderPath}`;
+            const apiUrl = `https://github.com/comics/${repoOwner}/${repoName}/contents/${folderPath}`;
             const response = await fetch(apiUrl);
             const data = await response.json();
 
