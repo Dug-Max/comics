@@ -3,38 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ver Libro en PDF</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <title>Comics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 30px;
+        }
+        #image-container {
+            max-width: 80%;
+            margin: 0 auto;
+        }
+        img {
+            width: 100%;
+            height: auto;
+        }
+        .navigation {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Ver el Libro en PDF</h1>
-    <canvas id="pdf-render"></canvas>
+    <h1>Visor de Comics</h1>
+
+    <div id="image-container">
+        <!-- Imagen inicial se cargará aquí -->
+        <img id="pdf-image" src="" alt="Página 1">
+    </div>
+
+    <div class="navigation">
+        <button onclick="prevImage()">Anterior</button>
+        <button onclick="nextImage()">Siguiente</button>
+    </div>
+
     <script>
-        const url = 'https://github.com/Dug-Max/comics/main/Comic_Fla.pdf';
+        const repoOwner = "Dug-Max";  // Tu nombre de usuario en GitHub
+        const repoName = "comics";  // El nombre de tu repositorio
+        const folderPath = "ExtractoPDF";  // Carpeta donde están las imágenes en tu repositorio
 
-        const pdfjsLib = window['pdfjs-dist/build/pdf'];
+        const images = []; // Para almacenar las URLs de las imágenes
+        let currentIndex = 0;
 
-        pdfjsLib.GlobalWorkerOptions.workerSrc = '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+        // Función para obtener las imágenes del repositorio de GitHub
+        async function fetchImages() {
+            const apiUrl = `https://github.com/Dug-Max/comics/ExtractoPDF/${repoOwner}/${repoName}/contents/${folderPath}`;
+            const response = await fetch(apiUrl);
+            const data = await response.json();
 
-        pdfjsLib.getDocument(url).promise.then(function (pdfDoc_) {
-            pdfDoc = pdfDoc_;
-            renderPage(1);
-        });
-
-        function renderPage(num) {
-            pdfDoc.getPage(num).then(function (page) {
-                const scale = 1.5;
-                const viewport = page.getViewport({ scale: scale });
-                const canvas = document.getElementById('pdf-render');
-                const context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-                page.render({
-                    canvasContext: context,
-                    viewport: viewport
+            // Filtrar solo las imágenes JPG y ordenarlas por el nombre
+            const jpgImages = data
+                .filter(file => file.name.endsWith('.jpg'))
+                .map(file => file.download_url)
+                .sort((a, b) => {
+                    const numA = parseInt(a.match(/(\d+)/)[0]);
+                    const numB = parseInt(b.match(/(\d+)/)[0]);
+                    return numA - numB;
                 });
-            });
+
+            images.push(...jpgImages); // Guardamos las imágenes ordenadas
+            displayImage(); // Mostrar la primera imagen
         }
+
+        // Función para mostrar la imagen actual
+        function displayImage() {
+            if (images.length > 0) {
+                document.getElementById('pdf-image').src = images[currentIndex];
+            }
+        }
+
+        // Función para ir a la imagen anterior
+        function prevImage() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                displayImage();
+            }
+        }
+
+        // Función para ir a la siguiente imagen
+        function nextImage() {
+            if (currentIndex < images.length - 1) {
+                currentIndex++;
+                displayImage();
+            }
+        }
+
+        // Cargar las imágenes cuando la página cargue
+        window.onload = fetchImages;
     </script>
 </body>
 </html>
